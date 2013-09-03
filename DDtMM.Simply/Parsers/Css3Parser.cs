@@ -1,0 +1,179 @@
+﻿using DDtMM.SIMPLY;
+using DDtMM.SIMPLY.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DDtMM.SIMPLY.Parsers
+{
+    public class Css3Parser : Parser
+    {
+        public Css3Parser() 
+        {
+            //RootProductionNames.Add("stylesheet");
+            Lexer = new Lexer();
+
+            Lexer.Substitutions = DefinitionCollection.Parse(@"
+h			: [0-9a-f];
+nonascii	: [\x80-\xff];
+unicode		: \\{h}{1,6}[ \t\r\n\f]?;
+escape		: {unicode}|\\[ -~\x80-\xff];
+nmstart		: [a-z]|{nonascii}|{escape};
+nmchar		: [a-z0-9\-]|{nonascii}|{escape};
+string1		: ""([\t !\#$%&(-~]|\\{nl}|'|{nonascii}|{escape})*"";
+string2		: '([\t !\#$%&(-~]|\\{nl}|""|{nonascii}|{escape})*';
+ident		: \-?{nmstart}{nmchar}*;
+name		: {nmchar}+;
+num			: [0-9]+|[0-9]*\.[0-9]+;
+string		: {string1}|{string2};
+url			: ([!\#$%&*-~]|{nonascii}|{escape})*;
+w			: [ \t\r\n\f]*;
+nl			: \n|\r\n|\r|\f;
+range		: \?{1,6}|{h}(\?{0,5}|{h}(\?{0,4}|{h}(\?{0,3}|{h}(\?{0,2}|{h}(\??|{h})))));
+");
+
+            Lexer.Modes.Add("default", DefinitionCollection.Parse(@"
+S				: [ \t\r\n\f]+;
+-COMMENT		: /\*[^*]*\*+([^/][^*]*\*+)*/;
+CDO				: <!--;
+CDC				: -->;
+INCLUDES		: ~=;
+DASHMATCH		: \|=;
+HASH			: \#{name};
+IMPORT_SYM		: @import;
+PAGE_SYM		: @page;
+MEDIA_SYM		: @media;
+FONT_FACE_SYM	: @font-face;
+CHARSET_SYM		: @charset;
+NAMESPACE_SYM	: @namespace;
+IMPORTANT_SYM	: !{w}important;
+EMS				: {num}em;
+EXS				: {num}ex;
+LENGTH			: {num}px;
+LENGTH			: {num}cm;
+LENGTH			: {num}mm;
+LENGTH			: {num}in;
+LENGTH			: {num}pt;
+LENGTH			: {num}pc;
+ANGLE			: {num}deg;
+ANGLE			: {num}rad;
+ANGLE			: {num}grad;
+TIME			: {num}ms;
+TIME			: {num}s;
+FREQ			: {num}Hz;
+FREQ			: {num}kHz;
+DIMEN			: {num}{ident};
+PERCENTAGE		: {num}%;
+NUMBER			: {num};
+URI				: url{w}\({w}{string}{w}\);
+URI				: url{w}\({w}{url}{w}\);
+FUNCTION		: {ident}\(;
+UNICODERANGE	: U\+{range};
+UNICODERANGE	: U\+{h}{1,6}-{h}{1,6};
+STRING			: {string};
+IDENT			: {ident};
+yytext			: .;
+"));
+
+            Grammar = Grammar.Parse(@"
+stylesheet
+  : ( CHARSET_SYM S* STRING S* ';' )?
+    (S|CDO|CDC)* ( import (S|CDO|CDC)* )*
+    ( namespace (S|CDO|CDC)* )*
+    ( ( ruleset | media | page | font_face ) (S|CDO|CDC)* )*
+  ;
+import
+  : IMPORT_SYM S*
+    (STRING|URI) S* ( medium ( ',' S* medium)* )? ';' S*
+  ;
+namespace
+  : NAMESPACE_SYM S* (namespace_prefix S*)? (STRING|URI) S* ';' S*
+  ;
+namespace_prefix
+  : IDENT
+  ;
+media
+  : MEDIA_SYM S* medium ( ',' S* medium )* '{' S* ruleset* '}' S*
+  ;
+medium
+  : IDENT S*
+  ;
+page
+  : PAGE_SYM S* IDENT? pseudo_page? S*
+    '{' S* declaration ( ';' S* declaration )* '}' S*
+  ;
+pseudo_page
+  : ':' IDENT
+  ;
+font_face
+  : FONT_FACE_SYM S*
+    '{' S* declaration ( ';' S* declaration )* '}' S*
+  ;
+operator
+  : '/' S* | ',' S* | /* empty */
+  ;
+combinator
+  : '+' S* | '>' S* | /* empty */
+  ;
+unary_operator
+  : '-' | '+'
+  ;
+property
+  : IDENT S*
+  ;
+ruleset
+  : selector ( ',' S* selector )*
+    '{' S* declaration ( ';' S* declaration )* '}' S*
+  ;
+selector
+  : simple_selector ( combinator simple_selector )*
+  ;
+simple_selector
+  : element_name? ( HASH | class | attrib | pseudo )* S*
+  ;
+class
+  : '.' IDENT
+  ;
+element_name
+  : IDENT | '*'
+  ;
+attrib
+  : '(' S* IDENT S* ( ( '=' | INCLUDES | DASHMATCH ) S*
+    ( IDENT | STRING ) S* )? ')'
+  ;
+pseudo
+  : ':' ( IDENT | FUNCTION S* IDENT S* ')' )
+  ;
+declaration
+  : property ':' S* expr prio?
+  | /* empty */
+  ;
+prio
+  : IMPORTANT_SYM S*
+  ;
+expr
+  : term ( operator term )*
+  ;
+term
+  : unary_operator?
+    ( NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* |
+      TIME S* | FREQ S* | function )
+  | STRING S* | IDENT S* | URI S* | UNICODERANGE S* | hexcolor
+  ;
+function
+  : FUNCTION S* expr ')' S*
+  ;
+/*
+ * There is a constraint on the color that it must
+ * have either 3 or 6 hex-digits (i.e., [0-9a-fA-F))
+ * after the #; e.g., #'000 is OK, but #abcd is not.
+ */
+hexcolor
+  : HASH S*
+  ;
+");
+        }
+    }
+}

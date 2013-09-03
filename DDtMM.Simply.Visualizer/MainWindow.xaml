@@ -1,0 +1,61 @@
+﻿<Window xmlns:Controls="clr-namespace:DDtMM.SIMPLY.Visualizer.Controls"  x:Class="DDtMM.SIMPLY.Visualizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ToolBarTray Background="White">
+            <ToolBar Band="1" BandIndex="1">
+                <Button Name="BuildParserButton" Click="BuildParserButton_Click">Build Parser</Button>
+                <Button Name="ParseCodeButton" Click="ParseCodeButton_Click">Parse Code</Button>
+            </ToolBar>
+        </ToolBarTray>
+        <TabControl Grid.Row="2">      
+            <TabItem>
+                <TabItem.Header>Grammar</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:TextEditor  DataContext="{Binding Grammar}"/>
+                </TabItem.Content>
+            </TabItem>                
+            <TabItem>
+                <TabItem.Header>Tokens</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:TokensViz  DataContext="{Binding TokenDefinitions}"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>Compiled Tokens</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:TokensViz  DataContext="{Binding TokenDefinitionsCompiled}"/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>Grammar</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:GrammarViz DataContext="{Binding Rules}" />
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>Code</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:TextEditor  DataContext="{Binding Code}"/>
+                </TabItem.Content>
+            </TabItem>            
+            <TabItem>
+                <TabItem.Header>Tokenized</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:TokenizedViz  DataContext="{Binding Tokenized}"/>
+                </TabItem.Content>
+            </TabItem>            
+            <TabItem IsSelected="True">
+                <TabItem.Header>Parse Tree</TabItem.Header>
+                <TabItem.Content>
+                    <Controls:ParseTreeViz DataContext="{Binding ParseTree}"/>
+                </TabItem.Content>
+            </TabItem>            
+        </TabControl>
+    </Grid>
+</Window>
