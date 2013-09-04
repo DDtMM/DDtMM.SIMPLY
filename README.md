@@ -62,7 +62,6 @@ urlchar 	: 	[\x09\x21\x23-\x26\x27-\x7E] | {nonascii} | {escape};
 nl 			: 	\x0A | \x0D \x0A | \x0D | \x0C;
 w 			: 	{wc}*;
 wc 			: 	\x09 | \x0A | \x0C | \x0D | \x20;
-");
 
 #Tokens
 HASH    	    : 	\# {name};
@@ -103,3 +102,9 @@ any         : ( IDENT | NUMBER | PERCENTAGE | DIMENSION | STRING
               | FUNCTION S* any* ')' | DASHMATCH | '(' S* any* ')'
               | '(' S* any* ')' ) S*;");
 `````
+
+Visualizer
+-
+The Visualizer is a simple program that allows you to view your productions and test the compiler on some code. 
+
+There are some sample grammars in the Examples folder within the Visualizer project.
