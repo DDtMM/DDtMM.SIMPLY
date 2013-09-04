@@ -66,7 +66,22 @@ namespace DDtMM.SIMPLY.Visualizer.Model
             if (propertyTable.ContainsKey(name) && (value = propertyTable[name]) is T) return (T)value ;
             return default(T);
         }
-
+        /// <summary>
+        /// Trigger Changing Event
+        /// </summary>
+        /// <param name="name"></param>
+        public void TriggerChanging(string name)
+        {
+            TriggerDelegateInstance(changingField, managed, new object[] { managed, new PropertyChangingEventArgs(name) });
+        }
+        /// <summary>
+        /// Trigger Changed Event
+        /// </summary>
+        /// <param name="name"></param>
+        public void TriggerChanged(string name)
+        {
+            TriggerDelegateInstance(changedField, managed, new object[] { managed, new PropertyChangedEventArgs(name) });
+        }
         /// <summary>
         /// Triggers propertychanging then sets the property value, then triggers changed
         /// </summary>
@@ -74,9 +89,9 @@ namespace DDtMM.SIMPLY.Visualizer.Model
         /// <param name="value"></param>
         private void SetValueWithChanging(string name, object value)
         {
-            TriggerDelegateInstance(changingField, managed, new object[] { managed, new PropertyChangingEventArgs( name ) });
+            TriggerChanging(name);
             propertyTable[name] = value;
-            TriggerDelegateInstance(changedField, managed, new object[] { managed, new PropertyChangedEventArgs( name ) });
+            TriggerChanged(name);
         }
 
         /// <summary>
@@ -87,7 +102,7 @@ namespace DDtMM.SIMPLY.Visualizer.Model
         private void SetValueDefault(string name, object value)
         {
             propertyTable[name] = value;
-            TriggerDelegateInstance(changedField, managed, new object[] { managed, name });
+            TriggerChanged(name);
         }
 
         private void TriggerDelegateInstance(FieldInfo delegateField, object instance, object[] handlerProperties)

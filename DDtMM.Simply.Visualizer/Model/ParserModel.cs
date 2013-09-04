@@ -15,10 +15,10 @@ namespace DDtMM.SIMPLY.Visualizer.Model
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
-        public ObservableCollection<Rule> Rules 
+        public ObservableCollection<Rule> Productions 
         {
-            get { return propmgr.Get<ObservableCollection<Rule>>("Rules"); }
-            set { propmgr.Set("Rules", value); }
+            get { return propmgr.Get<ObservableCollection<Rule>>("Productions"); }
+            set { propmgr.Set("Productions", value); }
         }
         public ObservableCollection<TokenType> TokenDefinitions
         {
@@ -69,13 +69,13 @@ namespace DDtMM.SIMPLY.Visualizer.Model
                         value.Lexer.Modes.First().Value.Compile(
                         value.Lexer.RegexOptions,
                         value.Lexer.Substitutions.Compile(value.Lexer.RegexOptions)));
-                    Rules = new ObservableCollection<Rule>(value.Grammar.Compile(value.Lexer).Productions);
+                    Productions = new ObservableCollection<Rule>(value.Productions.Compile(value.Lexer));
                 }
                 else
                 {
                     TokenDefinitions = new ObservableCollection<TokenType>();
                     TokenDefinitionsCompiled = new ObservableCollection<TokenType>();
-                    Rules = new ObservableCollection<Rule>();
+                    Productions = new ObservableCollection<Rule>();
                 }
                 Tokenized = new ObservableCollection<Token>();
                 ParseTree = new ParserNodeModel(new SyntaxNode(null, null));
@@ -95,7 +95,7 @@ namespace DDtMM.SIMPLY.Visualizer.Model
         {
             try
             {
-                Parser = ParserDocument.CreateParser(Grammar);
+                Parser = GrammarCompiler.CreateParser(Grammar);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace DDtMM.SIMPLY.Visualizer.Model
             {
                 List<Token> tokens = Parser.Lexer.Tokenize(Code);
                 Tokenized = new ObservableCollection<Token>(tokens);
-                ParseTree = new ParserNodeModel(Parser.Parse(tokens).Root.ReduceToProductionNames());
+                ParseTree = new ParserNodeModel(Parser.Parse(tokens).Root.RemoveWhitespaceOnlyNodes());
             }
             catch (Exception ex)
             {

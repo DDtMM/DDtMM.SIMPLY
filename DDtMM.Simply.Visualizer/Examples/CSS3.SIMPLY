@@ -1,21 +1,8 @@
-﻿using DDtMM.SIMPLY;
-using DDtMM.SIMPLY.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#AlternateCritera = First
+#RootProductionNames = stylesheet, statement
+#ZeroLengthRulesOK = true
 
-namespace DDtMM.SIMPLY.Parsers
-{
-    public class Css3Parser : Parser
-    {
-        public Css3Parser() 
-        {
-            //RootProductionNames.Add("stylesheet");
-            Lexer = new Lexer();
-
-            Lexer.Substitutions = DefinitionCollection.Parse(@"
+#TokenSubs
 h			: [0-9a-f];
 nonascii	: [\x80-\xff];
 unicode		: \\{h}{1,6}[ \t\r\n\f]?;
@@ -32,9 +19,9 @@ url			: ([!\#$%&*-~]|{nonascii}|{escape})*;
 w			: [ \t\r\n\f]*;
 nl			: \n|\r\n|\r|\f;
 range		: \?{1,6}|{h}(\?{0,5}|{h}(\?{0,4}|{h}(\?{0,3}|{h}(\?{0,2}|{h}(\??|{h})))));
-");
 
-            Lexer.Modes.Add("default", DefinitionCollection.Parse(@"
+
+#Tokens
 S				: [ \t\r\n\f]+;
 -COMMENT		: /\*[^*]*\*+([^/][^*]*\*+)*/;
 CDO				: <!--;
@@ -75,9 +62,9 @@ UNICODERANGE	: U\+{h}{1,6}-{h}{1,6};
 STRING			: {string};
 IDENT			: {ident};
 yytext			: .;
-"));
 
-            Grammar = Grammar.Parse(@"
+
+#Productions
 stylesheet
   : ( CHARSET_SYM S* STRING S* ';' )?
     (S|CDO|CDC)* ( import (S|CDO|CDC)* )*
@@ -173,7 +160,3 @@ function
 hexcolor
   : HASH S*
   ;
-");
-        }
-    }
-}

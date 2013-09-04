@@ -25,7 +25,7 @@ namespace DDtMM.SIMPLY
         {
             Substitutions = new DefinitionCollection();
             Modes = new Dictionary<string, DefinitionCollection>();
-            RegexOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase | RegexOptions.Multiline;
+            RegexOptions = RegexOptions.IgnoreCase | RegexOptions.Multiline;
         }
 
 

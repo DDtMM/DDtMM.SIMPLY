@@ -36,7 +36,7 @@ namespace DDtMM.SIMPLY.Rules
         /// </summary>
         /// <param name="grammar"></param>
         /// <param name="lexer"></param>
-        public void CreateReference(Grammar grammar, Lexer lexer)
+        public void CreateReference(Productions grammar, Lexer lexer)
         {
             object referredTo;
 

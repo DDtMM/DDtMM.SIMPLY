@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\packages\AvalonEdit.4.3.1.9430\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -55,10 +58,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\TextEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\GrammarViz.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -83,9 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\TextEditor.xaml.cs">
-      <DependentUpon>TextEditor.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\AvalonBinder.cs" />
     <Compile Include="Controls\GrammarViz.xaml.cs">
       <DependentUpon>GrammarViz.xaml</DependentUpon>
     </Compile>
@@ -98,6 +95,9 @@
     <Compile Include="Controls\TokensViz.xaml.cs">
       <DependentUpon>TokensViz.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\CollectionCountToBool.cs" />
+    <Compile Include="Converters\MultiBool.cs" />
+    <Compile Include="Converters\StringHasContent.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -124,6 +124,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Examples\CSS3.SIMPLY" />
+    <None Include="Examples\CSSCore.SIMPLY" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -138,6 +141,9 @@
       <Project>{051c4a0b-4cf9-4f28-9e4c-3f24a0cb24ad}</Project>
       <Name>DDtMM.SIMPLY</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Examples\stylesheet.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

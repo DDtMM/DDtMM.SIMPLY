@@ -7,11 +7,11 @@ using DDtMM.SIMPLY.Tokens;
 using System.Text.RegularExpressions;
 namespace DDtMM.SIMPLY
 {
-    public class ParserDocument
+    public class GrammarCompiler
     {
         static public Parser documentParser;
 
-        static ParserDocument()
+        static GrammarCompiler()
         {
             documentParser = new Parser();
 
@@ -19,7 +19,7 @@ namespace DDtMM.SIMPLY
             documentParser.Lexer.RegexOptions = RegexOptions.IgnoreCase | RegexOptions.Multiline;
             documentParser.Lexer.Substitutions = DefinitionCollection.Parse(@"
 noteol: [^\r\n];
-eol: \r\n|\n\r|\r|\n;
+eol: \r\n|\n\r|\r|\n|$;
 ");
             documentParser.Lexer.Modes.Add("default", DefinitionCollection.Parse(@"
 -COMMENT: /\*[^*]*\*+(?:[^/][^*]*\*+)*/ ;
@@ -29,7 +29,7 @@ S: [ \t]+;
 SPECIALCHAR: [.=] ;
 SHORTVAL: {noteol}+{eol} ;
 "));
-            documentParser.Grammar = Grammar.Parse(@"
+            documentParser.Productions = Productions.Parse(@"
 section      : name ( value | S* '=' S* value ) ;
 name         : NAME;
 value        : LONGVAL | SHORTVAL;
@@ -83,6 +83,15 @@ value        : LONGVAL | SHORTVAL;
                 case "#ZeroLengthRulesOK":
                     parser.Settings.ZeroLengthRulesOK = bool.Parse(value);
                     break;
+                case "#RegexOptions":
+                    parser.Lexer.RegexOptions = RegexOptions.None;
+                    if (value.Contains("x")) parser.Lexer.RegexOptions |= RegexOptions.IgnorePatternWhitespace;
+                    if (value.Contains("i")) parser.Lexer.RegexOptions |= RegexOptions.IgnoreCase;
+                    if (value.Contains("m")) parser.Lexer.RegexOptions |= RegexOptions.Multiline;
+                    if (value.Contains("s")) parser.Lexer.RegexOptions |= RegexOptions.Singleline;
+                    if (value.Contains("n")) parser.Lexer.RegexOptions |= RegexOptions.ExplicitCapture;
+                    if (value.Contains("r")) parser.Lexer.RegexOptions |= RegexOptions.RightToLeft;
+                    break;
                 case "#TokenSubs":
                     parser.Lexer.Substitutions = DefinitionCollection.Parse(value);
                     break;
@@ -90,7 +99,7 @@ value        : LONGVAL | SHORTVAL;
                     parser.Lexer.Modes.Add("default", DefinitionCollection.Parse(value));
                     break;
                 case "#Productions":
-                    parser.Grammar = Grammar.Parse(value);
+                    parser.Productions = Productions.Parse(value);
                     break;
             }
         }

@@ -141,6 +141,7 @@ namespace DDtMM.SIMPLY
             for (int i = Count - 1; i >= 0; i--)
             {
                 node = this[i];
+                node.RemoveWhitespaceOnlyNodes();
                 if (node.Count == 0 && (node.StartToken == null || String.IsNullOrWhiteSpace(node.StartToken.Text)))
                 {
                     this.RemoveAt(i);

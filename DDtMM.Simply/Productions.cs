@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace DDtMM.SIMPLY
 {
-    public class Grammar
+    public class Productions : List<Rule>
     {
-        static public Grammar Parse(string text)
+        static public Productions Parse(string text)
         {
-            Grammar g = new Grammar();
-            g.ParseGrammar(text);
+            Productions g = new Productions();
+            g.ParseProductions(text);
             return g;
         }
-
-        public List<Rule> Productions { get; set; }
 
         /// <summary>
         /// Group 1: words
@@ -31,9 +29,8 @@ namespace DDtMM.SIMPLY
         private Regex ruleTokenizer;
         private Regex grammarTokenizer;
 
-        public Grammar()
+        public Productions()
         {
-            Productions = new List<Rule>();
             grammarTokenizer = new Regex(@"\s*(\w+)\s*:s*((?:'(?:\\\\|\\'|\\|[^'\\])+'|""(?:\\\\|\\""|\\|[^""\\])+""|[^;])+);",
                 RegexOptions.Multiline);
 
@@ -46,9 +43,8 @@ namespace DDtMM.SIMPLY
 (.)", RegexOptions.IgnorePatternWhitespace);
         }
 
-        public void ParseGrammar(string text)
+        public void ParseProductions(string text)
         {
-            Productions = new List<Rule>();
             text = Common.StripComments(text);
             foreach (Match match in grammarTokenizer.Matches(text)) 
             {
@@ -132,7 +128,7 @@ namespace DDtMM.SIMPLY
                 }
             }
 
-            Productions.Add(Simplify(currentAlternation));
+            Add(Simplify(currentAlternation));
         }
 
         /// <summary>
@@ -186,22 +182,22 @@ namespace DDtMM.SIMPLY
 
         public Rule GetRule(string name)
         {
-            return Productions.FirstOrDefault(r => r.ProductionName == name);
+            return this.FirstOrDefault(r => r.ProductionName == name);
         }
 
 
         /// <summary>
         /// Creates a new grammar, replacing unknownTypeTokens with either rule types or token types
         /// </summary>
-        public Grammar Compile(Lexer t)
+        public Productions Compile(Lexer t)
         {
-            Grammar compiled = new Grammar();
-            compiled.Productions = this.Productions.Select(r => r.DeepCopy()).ToList();
-            Compile(compiled.Productions, compiled, t);
+            Productions compiled = new Productions();
+            compiled.AddRange(this.Select(r => r.DeepCopy()));
+            Compile(compiled, compiled, t);
             return compiled;
         }
 
-        private void Compile(IEnumerable<Rule> rules, Grammar g, Lexer t)
+        private void Compile(IEnumerable<Rule> rules, Productions g, Lexer t)
         {
             foreach (Rule rule in rules)
             {

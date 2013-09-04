@@ -14,12 +14,12 @@ namespace DDtMM.SIMPLY
     public class Parser
     {
         public Lexer Lexer { get; set; }
-        public Grammar Grammar { get; set; }
+        public Productions Productions { get; set; }
         public ParserSettings Settings;
  
         public Parser(ParserSettings settings = null)
         {
-            Grammar = new Grammar();
+            Productions = new Productions();
             Lexer = new Lexer();
             Settings = settings ?? new ParserSettings();
         }
@@ -37,7 +37,7 @@ namespace DDtMM.SIMPLY
             ParserResult docResult = new ParserResult();
             Token token = tokens.FirstOrDefault();
             Token startToken;
-            List<Rule> rules = Grammar.Compile(Lexer).Productions
+            List<Rule> rules = Productions.Compile(Lexer)
                 .Where(r => Settings.RootProductionNames.Count == 0 || Settings.RootProductionNames.Contains(r.ProductionName)).ToList();
 
             while (token != null)

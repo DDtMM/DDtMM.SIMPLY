@@ -40,11 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
-    <Compile Include="ParserDocument.cs" />
+    <Compile Include="GrammarCompiler.cs" />
     <Compile Include="ParserSettings.cs" />
     <Compile Include="ParserResult.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Grammar.cs" />
+    <Compile Include="Productions.cs" />
     <Compile Include="ListCustomKeys.cs" />
     <Compile Include="ObservableParserNode.cs" />
     <Compile Include="Rules\Empty.cs" />
@@ -62,8 +62,6 @@
     <Compile Include="Parser.cs" />
     <Compile Include="InvalidTokenException.cs" />
     <Compile Include="SyntaxNode.cs" />
-    <Compile Include="Parsers\Css3Parser.cs" />
-    <Compile Include="Parsers\CssParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\DefinitionsRegex.cs" />
     <Compile Include="Tokens\DefinitionCollection.cs" />
