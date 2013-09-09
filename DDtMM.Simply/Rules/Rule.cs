@@ -46,12 +46,13 @@ namespace DDtMM.SIMPLY.Rules
 
         public override string ToString()
         {
-            return string.Format("({0}): {1}", this.ProductionName ?? this.GetType().Name, ToString("r"));
+            return string.Format("{0}: {1}", ToString("n"), ToString("r"));
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="format">
+        /// "n" production name or type name
         /// "r" uses render method, otherwise ToString() is returned
         /// "p" for path
         /// </param>
@@ -70,6 +71,8 @@ namespace DDtMM.SIMPLY.Rules
 
             switch (format)
             {
+                case "n":
+                    return this.ProductionName ?? string.Format("({0})", this.GetType().Name + ")");
                 case "r": 
                     return Render();
                 case "p":

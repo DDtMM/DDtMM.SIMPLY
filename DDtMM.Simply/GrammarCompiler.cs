@@ -17,6 +17,7 @@ namespace DDtMM.SIMPLY
 
             documentParser.Lexer = new Lexer();
             documentParser.Lexer.RegexOptions = RegexOptions.IgnoreCase | RegexOptions.Multiline;
+            documentParser.Settings.RootProductionNames = new List<string>(new string[1] { "section"} );
             documentParser.Lexer.Substitutions = DefinitionCollection.Parse(@"
 noteol: [^\r\n];
 eol: \r\n|\n\r|\r|\n|$;
@@ -52,7 +53,7 @@ value        : LONGVAL | SHORTVAL;
 
         static private void ProcessSection(SyntaxNode section, Parser parser) 
         {
-            if (section.Rule.ProductionName != "section") throw InvalidTokenException.Create(section, "section");
+            if (section.Rule.ProductionName != "section") throw Exceptions.InvalidSyntaxException(section, "section");
 
             string name = null;
             string value = null;
@@ -91,6 +92,7 @@ value        : LONGVAL | SHORTVAL;
                     if (value.Contains("s")) parser.Lexer.RegexOptions |= RegexOptions.Singleline;
                     if (value.Contains("n")) parser.Lexer.RegexOptions |= RegexOptions.ExplicitCapture;
                     if (value.Contains("r")) parser.Lexer.RegexOptions |= RegexOptions.RightToLeft;
+                    if (value.Contains("none")) parser.Lexer.RegexOptions = RegexOptions.None;
                     break;
                 case "#TokenSubs":
                     parser.Lexer.Substitutions = DefinitionCollection.Parse(value);

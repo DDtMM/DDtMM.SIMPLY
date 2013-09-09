@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DDtMM.SIMPLY.Rules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DDtMM.SIMPLY
 {
-    public class InvalidTokenException : Exception
+    public static class Exceptions
     {
-        static public InvalidTokenException Create(SyntaxNode node, string expected = null) 
+        static public Exception InvalidSyntaxException(SyntaxNode node, string expected = null) 
         {
             string message;
             if (node.StartToken != null) 
@@ -25,12 +26,14 @@ namespace DDtMM.SIMPLY
                 message += string.Format(" Expected rule {0}, but token matched rule {1}.", expected, node.Rule);
             }
 
-            return new InvalidTokenException(message);
+            return new Exception(message);
         }
 
-        private InvalidTokenException() : base() { }
-
-        private InvalidTokenException(string message) : base(message) { }
+        static public Exception UnresolvedReferenceException(Referrer referrer)
+        {
+            return new Exception(string.Format("Unresolved reference for {0}, refer's to {1}",
+                referrer.ProductionName ?? referrer, referrer.Symbol));
+        }
 
     }
 }

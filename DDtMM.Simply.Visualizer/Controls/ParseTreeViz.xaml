@@ -21,7 +21,7 @@
                                 <MenuItem Header="Expand All" Click="MenuItem_Click" CommandParameter="Expand"/>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <TextBlock VerticalAlignment="Top" Text="{Binding Rule.ProductionName}"  />
+                        <TextBlock VerticalAlignment="Top" Text="{Binding Rule, StringFormat={}{0:n}}"  />
                         <TextBlock VerticalAlignment="Top" Text="{Binding Token.TokenType.Name}" Margin="5,0,5,0" />
                         <TextBlock VerticalAlignment="Top" Text="{Binding Token.Text}"  />
                         

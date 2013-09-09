@@ -100,6 +100,7 @@ namespace DDtMM.SIMPLY.Visualizer.Model
             catch (Exception ex)
             {
                 LastException = ex;
+                throw ex;
             }
         }
 
@@ -109,7 +110,7 @@ namespace DDtMM.SIMPLY.Visualizer.Model
             {
                 List<Token> tokens = Parser.Lexer.Tokenize(Code);
                 Tokenized = new ObservableCollection<Token>(tokens);
-                ParseTree = new ParserNodeModel(Parser.Parse(tokens).Root.RemoveWhitespaceOnlyNodes());
+                ParseTree = new ParserNodeModel(Parser.Parse(tokens).Root.RemoveWhitespaceOnlyNodes().ReduceToNonRedundant());
             }
             catch (Exception ex)
             {

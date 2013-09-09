@@ -98,6 +98,7 @@
     <Compile Include="Converters\CollectionCountToBool.cs" />
     <Compile Include="Converters\MultiBool.cs" />
     <Compile Include="Converters\StringHasContent.cs" />
+    <None Include="Examples\chess-algebraicNotation.SIMPLY" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -143,6 +144,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Examples\chessexample.txt" />
     <Content Include="Examples\stylesheet.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

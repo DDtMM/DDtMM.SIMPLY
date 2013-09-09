@@ -1,0 +1,34 @@
+﻿#AlternateCritera = First
+#ZeroLengthRulesOK = true
+#RegexOptions = None
+
+#TokenSubs
+row: [12345678];
+col: [abcdefgh];
+#Tokens
+MOVE_NUM: \d+\.;
+RESULT: 0-1|1-0|1/2-1/2;
+PIECE: [KQRBNP];
+POS: {col}{row};
+DISAMB: {col}|{row};
+CAPTURE: x;
+CASTLE: O-O(-o)?;
+CHECK: [+#];
+ANOTE_1: [!?]{1,2};
+ANOTE_2: \([^)]*\);
+RESUMPTION: \.\.\.;
+S: \s;
+
+#Productions
+game: turn+ RESULT;
+turn: MOVE_NUM S* move S* ( move | resumed )? S* ;
+move: ( ( piece position ) | CASTLE ) CHECK? ANOTE_1? S* ANOTE_2?;
+resumed: RESUMPTION S* move;
+position: DISAMB? CAPTURE? POS;
+piece: king | queen | rook | bishop | knight | pawn;
+king: 'K';
+queen: 'Q';
+rook: 'R';
+bishop: 'B';
+knight: 'N';
+pawn: 'P' | ;

@@ -48,6 +48,8 @@ namespace DDtMM.SIMPLY.Rules
             {
                 RefersTo = new TokenReference((TokenType)referredTo, this);
             }
+
+            if (RefersTo == null) throw Exceptions.UnresolvedReferenceException(this);
         }
 
         /// <summary>

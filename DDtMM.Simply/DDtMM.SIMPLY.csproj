@@ -60,7 +60,7 @@
     <Compile Include="Rules\Grouping.cs" />
     <Compile Include="Rules\ReferrerTypes\TokenReference.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="InvalidTokenException.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="SyntaxNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\DefinitionsRegex.cs" />

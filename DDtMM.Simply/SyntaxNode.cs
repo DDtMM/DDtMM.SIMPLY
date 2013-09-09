@@ -135,6 +135,40 @@ namespace DDtMM.SIMPLY
             return this;
         }
 
+        public SyntaxNode ReduceToNonRedundant()
+        {
+            SyntaxNode node;
+            Token endToken = this.GetEndToken();
+
+            for (int i = nodes.Count - 1; i >= 0; i--)
+            {
+                nodes[i].ReduceToNonRedundant();
+            }
+            
+
+            if (nodes.Count == 1)
+            {
+                node = nodes[0];
+                if (node.GetEndToken() == this.GetEndToken())
+                {
+                    if (string.IsNullOrEmpty(node.Rule.ProductionName))
+                    {
+                        nodes.Clear();
+                        nodes.AddRange(node);
+                    }
+                    else if (Parent != null && string.IsNullOrEmpty(Rule.ProductionName))
+                    {
+                        SyntaxNode parent = this.Parent;
+                        int index = parent.nodes.IndexOf(this);
+
+                        parent.RemoveAt(index);
+                        parent.Insert(index, node);
+                    }
+                }
+            }
+            
+            return this;
+        }
         public SyntaxNode RemoveWhitespaceOnlyNodes()
         {
             SyntaxNode node;
@@ -142,7 +176,8 @@ namespace DDtMM.SIMPLY
             {
                 node = this[i];
                 node.RemoveWhitespaceOnlyNodes();
-                if (node.Count == 0 && (node.StartToken == null || String.IsNullOrWhiteSpace(node.StartToken.Text)))
+                if (string.IsNullOrEmpty(node.Rule.ProductionName) &&
+                    node.Count == 0 && (node.StartToken == null || String.IsNullOrWhiteSpace(node.StartToken.Text)))
                 {
                     this.RemoveAt(i);
                 }
