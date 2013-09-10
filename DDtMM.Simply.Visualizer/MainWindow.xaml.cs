@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using System.IO;
+using DDtMM.SIMPLY.Visualizer.Controls;
 
 namespace DDtMM.SIMPLY.Visualizer
 {
@@ -83,85 +84,33 @@ namespace DDtMM.SIMPLY.Visualizer
             }
         }
 
-        private void LoadParserButton_Click(object sender, RoutedEventArgs e)
-        {
-            string content;
- 
-            if (ShowAndGetContent(out content, ref parserFile))
-            {
-                ((ParserModel)DataContext).Grammar = content;
-                GrammarTab.IsSelected = true;
-            }
-        }
+  
+        //private void ParserInterface_FileSave(object sender, FileEventArgs e)
+        //{
+        //    ((FileInterface)sender).SaveContent(((ParserModel)DataContext).Grammar);
+        //}
 
-        private void LoadCodeButton_Click(object sender, RoutedEventArgs e)
-        {
-            string content;
-   
-            if (ShowAndGetContent(out content, ref codeFile))
-            {
- 
-                ((ParserModel)DataContext).Code = content;
-            }
-        }
+        //private void ParserInterface_FileOpen(object sender, FileEventArgs e)
+        //{
+        //    string code = "";
+        //    if (((FileInterface)sender).OpenContent(out code))
+        //    {
+        //        ((ParserModel)DataContext).Grammar = code;
+        //    }
+        //}
 
-        private bool ShowAndGetContent(out string content, ref string file)
-        {
-            content = null;
-            OpenFileDialog ofd = new OpenFileDialog();
+        //private void CodeFile_FileSave(object sender, FileEventArgs e)
+        //{
+        //    ((FileInterface)sender).SaveContent(((ParserModel)DataContext).Code);
+        //}
 
-            if (file != null) ofd.FileName = file;
-
-            if (ofd.ShowDialog().Value)
-            {
-                using (Stream s = ofd.OpenFile())
-                {
-                    using (StreamReader sr = new StreamReader(s))
-                    {
-                        content = sr.ReadToEnd();
-                    }
-                }
-                file = ofd.FileName;
-                return true;
-            }
-            return false;
-        }
-
-        private void SaveParserButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveContent(GrammarEditor.Text, ref parserFile);
-        }
-
-        private void SaveCodeButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveContent(CodeEditor.Text, ref codeFile);
-        }
-
-        private bool SaveContent(string content, ref string file)
-        {
-            try
-            {
-                SaveFileDialog sfd = new SaveFileDialog();
-                if (file != null) sfd.FileName = file;
-
-                if (sfd.ShowDialog().Value)
-                {
-                    using (var fs = File.OpenWrite(sfd.FileName))
-                    {
-                        using (var sw = new StreamWriter(fs))
-                        {
-                            sw.Write(content);
-                            file = sfd.FileName;
-                        }
-                    }
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Unable to save/ \n" + ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            return false;
-        }
+        //private void CodeFile_FileOpen(object sender, FileEventArgs e)
+        //{
+        //    string code = "";
+        //    if (((FileInterface)sender).OpenContent(out code))
+        //    {
+        //        ((ParserModel)DataContext).Code = code;
+        //    }
+        //}
     }
 }

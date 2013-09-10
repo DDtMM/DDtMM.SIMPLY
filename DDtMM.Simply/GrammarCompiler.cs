@@ -98,6 +98,7 @@ value        : LONGVAL | SHORTVAL;
                     parser.Lexer.Substitutions = DefinitionCollection.Parse(value);
                     break;
                 case "#Tokens":
+                    parser.Lexer.Modes.Clear();
                     parser.Lexer.Modes.Add("default", DefinitionCollection.Parse(value));
                     break;
                 case "#Productions":

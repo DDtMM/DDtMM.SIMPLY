@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\AvalonBinder.cs" />
+    <Compile Include="Controls\FileInterface.cs" />
     <Compile Include="Controls\GrammarViz.xaml.cs">
       <DependentUpon>GrammarViz.xaml</DependentUpon>
     </Compile>
@@ -99,10 +100,15 @@
     <Compile Include="Controls\TokensViz.xaml.cs">
       <DependentUpon>TokensViz.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ByteArrayConverter.cs" />
     <Compile Include="Converters\CollectionCountToBool.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\InvertBoolConverter.cs" />
     <Compile Include="Converters\MultiBool.cs" />
+    <Compile Include="Converters\StringToObjectConverter.cs" />
     <Compile Include="Converters\StringHasContent.cs" />
     <None Include="Examples\chess-algebraicNotation.SIMPLY" />
+    <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

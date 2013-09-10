@@ -12,19 +12,38 @@
             <Converters:CollectionCountToBool x:Key="ColCountToBool" />
             <Converters:StringHasContent x:Key="StringHasContentToBool" />
             <Converters:MultiBool x:Key="MultiBool" />
+            <Converters:ByteArrayConverter x:Key="ByteArray" />
+            <Converters:StringToObjectConverter x:Key="StrToObj" />
+
+            
         </DockPanel.Resources>
-        <my:Ribbon DockPanel.Dock="Top">
-            <my:RibbonTab Header="File">
+        <Controls:FileInterface x:Name="CodeFile" FileData="{Binding Code, Mode=TwoWay}"   />
+        <Controls:FileInterface x:Name="ParserFile" Filter="SIMPLY file|*.SIMPLY|All Files|*.*" 
+                                    FileData="{Binding Grammar, Mode=TwoWay, Converter={StaticResource StrToObj}}" />
+        <my:Ribbon DockPanel.Dock="Top" >
+            <my:RibbonTab Header="Main">
                 <my:RibbonGroup Header="Parser">
-                    <my:RibbonButton Name="LoadParserButton" Click="LoadParserButton_Click" Label="Load" ToolTip="Load Parser" />
-                    <my:RibbonButton Name="SaveParserButton" Click="SaveParserButton_Click" Label="Save" ToolTip="Load Parser" />
+                    <my:RibbonButton Name="LoadParserButton" 
+                                     Command="Controls:FileInterface.Open" 
+                                     CommandTarget="{Binding ElementName=ParserFile}" 
+                                     Label="Load" ToolTip="Load Parser" />
+                    <my:RibbonButton Name="SaveParserButton" 
+                                    Command="Controls:FileInterface.Save" 
+                                     CommandTarget="{Binding ElementName=ParserFile}"
+                                     Label="Save" ToolTip="Save Parser" />
                     <my:RibbonButton Name="BuildParserButton" Click="BuildParserButton_Click"
                                     IsEnabled="{Binding Grammar, Converter={StaticResource StringHasContentToBool}}" Label="Build" />
                 </my:RibbonGroup >
             
                 <my:RibbonGroup  Header="Code">
-                    <my:RibbonButton Name="LoadCodeButton" Click="LoadCodeButton_Click" Label="Load" />
-                    <my:RibbonButton Name="SaveCodeButton" Click="SaveCodeButton_Click" Label="Save" />
+                    <my:RibbonButton Name="LoadCodeButton" 
+                                     Command="Controls:FileInterface.Open" 
+                                     CommandTarget="{Binding ElementName=CodeFile}" 
+                                     Label="Load" />
+                    <my:RibbonButton Name="SaveCodeButton" 
+                                     Command="Controls:FileInterface.Save" 
+                                     CommandTarget="{Binding ElementName=CodeFile}" 
+                                     Label="Save" />
                     <my:RibbonButton Name="ParseCodeButton" Click="ParseCodeButton_Click" Label="Parse">
                         <my:RibbonButton.IsEnabled>
                             <MultiBinding Converter="{StaticResource MultiBool}">

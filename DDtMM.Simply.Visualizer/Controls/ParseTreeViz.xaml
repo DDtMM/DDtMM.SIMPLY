@@ -3,9 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Converters="clr-namespace:DDtMM.SIMPLY.Visualizer.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.Resources>
+            <Converters:ValueConverterGroup x:Key="ColCountToViz">
+                <Converters:CollectionCountToBool />
+                <Converters:InvertBoolConverter />
+                <Converters:BoolToVisibilityConverter/>
+            </Converters:ValueConverterGroup>
+            <Converters:CollectionCountToBool x:Key="ColCountToBool" />
+ 
+        </Grid.Resources>
         <TreeView ItemsSource="{Binding Children}">
             <TreeView.Resources>
                 <Style TargetType="TreeViewItem">
@@ -22,8 +32,11 @@
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <TextBlock VerticalAlignment="Top" Text="{Binding Rule, StringFormat={}{0:n}}"  />
-                        <TextBlock VerticalAlignment="Top" Text="{Binding Token.TokenType.Name}" Margin="5,0,5,0" />
-                        <TextBlock VerticalAlignment="Top" Text="{Binding Token.Text}"  />
+                        <TextBlock VerticalAlignment="Top" Text="{Binding Token.TokenType.Name}" Margin="5,0,5,0"
+                                   Visibility="{Binding Children, Converter={StaticResource ColCountToViz}}" />
+                        <TextBlock VerticalAlignment="Top" Text="{Binding Token.Text}"  
+                                   Visibility="{Binding Children, Converter={StaticResource  ColCountToViz}}"
+                                   Background="Bisque"/>
                         
                     </StackPanel>
                 </HierarchicalDataTemplate>
