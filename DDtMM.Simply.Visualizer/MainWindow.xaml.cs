@@ -27,6 +27,9 @@ namespace DDtMM.SIMPLY.Visualizer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string codeFile;
+        public string parserFile;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,10 +38,6 @@ namespace DDtMM.SIMPLY.Visualizer
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
-            
-
-
             ParserNodeReporter.Current.NodeAdded += Current_NodeAdded;
             ParserNodeReporter.Current.NodeRemoved += Current_NodeRemoved;
             ParserModel parserModel = new ParserModel(new Parser());
@@ -87,7 +86,8 @@ namespace DDtMM.SIMPLY.Visualizer
         private void LoadParserButton_Click(object sender, RoutedEventArgs e)
         {
             string content;
-            if (ShowAndGetContent(out content))
+ 
+            if (ShowAndGetContent(out content, ref parserFile))
             {
                 ((ParserModel)DataContext).Grammar = content;
                 GrammarTab.IsSelected = true;
@@ -97,16 +97,21 @@ namespace DDtMM.SIMPLY.Visualizer
         private void LoadCodeButton_Click(object sender, RoutedEventArgs e)
         {
             string content;
-            if (ShowAndGetContent(out content))
+   
+            if (ShowAndGetContent(out content, ref codeFile))
             {
+ 
                 ((ParserModel)DataContext).Code = content;
             }
         }
 
-        private bool ShowAndGetContent(out string content)
+        private bool ShowAndGetContent(out string content, ref string file)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
             content = null;
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            if (file != null) ofd.FileName = file;
+
             if (ofd.ShowDialog().Value)
             {
                 using (Stream s = ofd.OpenFile())
@@ -116,11 +121,47 @@ namespace DDtMM.SIMPLY.Visualizer
                         content = sr.ReadToEnd();
                     }
                 }
+                file = ofd.FileName;
                 return true;
             }
-
             return false;
         }
-        
+
+        private void SaveParserButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveContent(GrammarEditor.Text, ref parserFile);
+        }
+
+        private void SaveCodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveContent(CodeEditor.Text, ref codeFile);
+        }
+
+        private bool SaveContent(string content, ref string file)
+        {
+            try
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                if (file != null) sfd.FileName = file;
+
+                if (sfd.ShowDialog().Value)
+                {
+                    using (var fs = File.OpenWrite(sfd.FileName))
+                    {
+                        using (var sw = new StreamWriter(fs))
+                        {
+                            sw.Write(content);
+                            file = sfd.FileName;
+                        }
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to save/ \n" + ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            return false;
+        }
     }
 }

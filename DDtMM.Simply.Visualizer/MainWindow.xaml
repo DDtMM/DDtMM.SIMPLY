@@ -1,38 +1,43 @@
 ﻿<Window x:Class="DDtMM.SIMPLY.Visualizer.MainWindow"
+    
+        xmlns:my="http://schemas.microsoft.com/winfx/2006/xaml/presentation/ribbon"  
         xmlns:Controls="clr-namespace:DDtMM.SIMPLY.Visualizer.Controls"  
         xmlns:Converters="clr-namespace:DDtMM.SIMPLY.Visualizer.Converters"
         xmlns:Avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Parser Visualizer" Height="350" Width="525">
-    <Grid>
-        <Grid.Resources>
+    <DockPanel>
+        <DockPanel.Resources>
             <Converters:CollectionCountToBool x:Key="ColCountToBool" />
             <Converters:StringHasContent x:Key="StringHasContentToBool" />
             <Converters:MultiBool x:Key="MultiBool" />
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>     
-        <ToolBarTray Background="White">
-            <ToolBar Band="1" BandIndex="1">
-                <Button Name="LoadParserButton" Click="LoadParserButton_Click">Load Grammar</Button>
-                <Button Name="BuildParserButton" Click="BuildParserButton_Click"
-                        IsEnabled="{Binding Grammar, Converter={StaticResource StringHasContentToBool}}">Build Parser</Button>
-            </ToolBar>
-            <ToolBar Band="1" BandIndex="2">
-                <Button Name="LoadCodeButton" Click="LoadCodeButton_Click">Load Code</Button>
-                <Button Name="ParseCodeButton" Click="ParseCodeButton_Click">
-                    <Button.IsEnabled>
-                        <MultiBinding Converter="{StaticResource MultiBool}">
-                            <Binding Path="Code" Converter="{StaticResource StringHasContentToBool}" />
-                            <Binding Path="Productions" Converter="{StaticResource ColCountToBool}" />
-                        </MultiBinding>
-                    </Button.IsEnabled>
-                    Parse Code</Button>
-            </ToolBar>
-        </ToolBarTray>
+        </DockPanel.Resources>
+        <my:Ribbon DockPanel.Dock="Top">
+            <my:RibbonTab Header="File">
+                <my:RibbonGroup Header="Parser">
+                    <my:RibbonButton Name="LoadParserButton" Click="LoadParserButton_Click" Label="Load" ToolTip="Load Parser" />
+                    <my:RibbonButton Name="SaveParserButton" Click="SaveParserButton_Click" Label="Save" ToolTip="Load Parser" />
+                    <my:RibbonButton Name="BuildParserButton" Click="BuildParserButton_Click"
+                                    IsEnabled="{Binding Grammar, Converter={StaticResource StringHasContentToBool}}" Label="Build" />
+                </my:RibbonGroup >
+            
+                <my:RibbonGroup  Header="Code">
+                    <my:RibbonButton Name="LoadCodeButton" Click="LoadCodeButton_Click" Label="Load" />
+                    <my:RibbonButton Name="SaveCodeButton" Click="SaveCodeButton_Click" Label="Save" />
+                    <my:RibbonButton Name="ParseCodeButton" Click="ParseCodeButton_Click" Label="Parse">
+                        <my:RibbonButton.IsEnabled>
+                            <MultiBinding Converter="{StaticResource MultiBool}">
+                                <Binding Path="Code" Converter="{StaticResource StringHasContentToBool}" />
+                                <Binding Path="Productions" Converter="{StaticResource ColCountToBool}" />
+                            </MultiBinding>
+                        </my:RibbonButton.IsEnabled>
+                    
+                    </my:RibbonButton>
+                </my:RibbonGroup>
+            </my:RibbonTab>
+        </my:Ribbon>
+ 
         <TabControl Grid.Row="2">      
             <TabItem Name="GrammarTab">
 
@@ -87,5 +92,5 @@
                 </TabItem.Content>
             </TabItem>            
         </TabControl>
-    </Grid>
+    </DockPanel>
 </Window>
