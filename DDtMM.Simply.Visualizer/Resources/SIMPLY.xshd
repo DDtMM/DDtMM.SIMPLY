@@ -1,0 +1,63 @@
+<SyntaxDefinition name="SIMPLY"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Comment" foreground="Green" />
+  <Color name="String" foreground="Blue" />
+  <Color name="Section" foreground="Purple" />
+  <Color name="ShortVal" foreground="Black" />
+  <Color name="LongValName" foreground="Brown" />
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="Comment" multiline="true"
+      begin="/\*" end="\*/" />
+
+
+    <Span multiline="true"
+     begin="^#(?=Productions)" end="(?=^#)|=[^\n\r]+">
+      <RuleSet>
+        <Span begin="(?&lt;=^#)" end="\s(?=\S)" color="Section" multiline="false" />
+        <Span begin="^\w+\s*" end="\:" color="LongValName" multiline="false" />
+        <Span color="String">
+          <Begin>"</Begin>
+          <End>"</End>
+          <RuleSet>
+            <!-- nested span for escape sequences -->
+            <Span begin="\\" end="." />
+          </RuleSet>
+        </Span>
+
+        <Span color="String">
+          <Begin>'</Begin>
+          <End>'</End>
+          <RuleSet>
+            <!-- nested span for escape sequences -->
+            <Span begin="\\" end="." />
+          </RuleSet>
+        </Span>
+        <Span color="ShortVal">
+          <Begin>\S+</Begin>
+          <End>(?=\s)</End>
+          <RuleSet>
+            <!-- nested span for escape sequences -->
+            <Span begin="\\" end="." />
+          </RuleSet>
+        </Span>
+        <Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+    <Span multiline="true"
+     begin="^#" end="(?=^#)|=[^\n\r]+" >
+      <RuleSet>
+        <Span begin="(?&lt;=^#)" end="\s(?=\S)" color="Section" multiline="false" />
+        <Span begin="^\w+\s*" end="\:" color="LongValName" multiline="false" />
+
+        <Span color="Comment" multiline="true"
+             begin="/\*" end="\*/" />
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+
+
+  </RuleSet>
+</SyntaxDefinition>

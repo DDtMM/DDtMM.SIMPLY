@@ -59,5 +59,15 @@ namespace DDtMM.SIMPLY.Visualizer.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SIMPLYHighlighter {
+            get {
+                object obj = ResourceManager.GetObject("SIMPLYHighlighter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

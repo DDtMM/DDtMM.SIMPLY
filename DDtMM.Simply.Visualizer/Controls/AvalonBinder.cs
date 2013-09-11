@@ -1,12 +1,16 @@
 ﻿using DDtMM.SIMPLY.Visualizer.Model;
 using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Highlighting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
 
 namespace DDtMM.SIMPLY.Visualizer.Controls
 {
@@ -95,6 +99,22 @@ namespace DDtMM.SIMPLY.Visualizer.Controls
             ((AvalonBinder)sender).Text = (string) args.NewValue;
         }
 
+        public string HighlightingDefinition
+        {
+            set
+            {
+                using (StringReader sr = new StringReader(value))
+                {
+                    using (XmlTextReader xtr = new XmlTextReader(sr))
+                    {
+                        TextDocument x = new TextDocument();
+                        Editor.SyntaxHighlighting = ICSharpCode.AvalonEdit.Highlighting.Xshd.
+                            HighlightingLoader.Load(xtr, HighlightingManager.Instance);
+                    }
+                }
+
+            }  
+        }
         #endregion
 
         /// <summary>

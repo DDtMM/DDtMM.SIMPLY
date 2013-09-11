@@ -28,13 +28,18 @@ namespace DDtMM.SIMPLY.Visualizer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string codeFile;
-        public string parserFile;
+
+    
 
         public MainWindow()
         {
+          
+            
             InitializeComponent();
+            GrammarBinder.HighlightingDefinition =
+                Encoding.UTF8.GetString(Visualizer.Properties.Resources.SIMPLYHighlighter);
             Loaded += MainWindow_Loaded;
+            
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -49,6 +54,7 @@ namespace DDtMM.SIMPLY.Visualizer
         void Current_NodeRemoved(object sender, ParserNodeReporter.ParserNodeEventArgs e)
         {
             Console.WriteLine("Removed " + e.Node);
+            
         }
 
         void Current_NodeAdded(object sender, ParserNodeReporter.ParserNodeEventArgs e)
@@ -85,32 +91,6 @@ namespace DDtMM.SIMPLY.Visualizer
         }
 
   
-        //private void ParserInterface_FileSave(object sender, FileEventArgs e)
-        //{
-        //    ((FileInterface)sender).SaveContent(((ParserModel)DataContext).Grammar);
-        //}
-
-        //private void ParserInterface_FileOpen(object sender, FileEventArgs e)
-        //{
-        //    string code = "";
-        //    if (((FileInterface)sender).OpenContent(out code))
-        //    {
-        //        ((ParserModel)DataContext).Grammar = code;
-        //    }
-        //}
-
-        //private void CodeFile_FileSave(object sender, FileEventArgs e)
-        //{
-        //    ((FileInterface)sender).SaveContent(((ParserModel)DataContext).Code);
-        //}
-
-        //private void CodeFile_FileOpen(object sender, FileEventArgs e)
-        //{
-        //    string code = "";
-        //    if (((FileInterface)sender).OpenContent(out code))
-        //    {
-        //        ((ParserModel)DataContext).Code = code;
-        //    }
-        //}
+   
     }
 }

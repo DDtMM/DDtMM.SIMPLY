@@ -63,10 +63,10 @@ value        : LONGVAL | SHORTVAL;
                 switch (node.Rule.ProductionName)
                 {
                     case "name":
-                        name = node.StartToken.Text;
+                        name = node.StartToken.Text.Trim();
                         break;
                     case "value":
-                        value = node.StartToken.Text;
+                        value = node.StartToken.Text.Trim();
                         break;
                 }
             }
@@ -82,7 +82,9 @@ value        : LONGVAL | SHORTVAL;
                         Regex.Split(value, @"\s*,\s*"));
                     break;
                 case "#ZeroLengthRulesOK":
-                    parser.Settings.ZeroLengthRulesOK = bool.Parse(value);
+                    // boolean.parse wasn't working.
+                    parser.Settings.ZeroLengthRulesOK = 
+                        Regex.Match(value, @"\btrue\b", RegexOptions.IgnoreCase).Success;
                     break;
                 case "#RegexOptions":
                     parser.Lexer.RegexOptions = RegexOptions.None;

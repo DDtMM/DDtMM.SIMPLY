@@ -64,8 +64,8 @@
                 <TabItem.Content>
                     
                     <Avalon:TextEditor Name="GrammarEditor" >
-                        <Controls:AvalonBinder.Binder>
-                            <Controls:AvalonBinder Text="{Binding Grammar, Mode=TwoWay}" />
+                        <Controls:AvalonBinder.Binder >
+                            <Controls:AvalonBinder x:Name="GrammarBinder" Text="{Binding Grammar, Mode=TwoWay}" />
                         </Controls:AvalonBinder.Binder>
                     </Avalon:TextEditor>
                 </TabItem.Content>

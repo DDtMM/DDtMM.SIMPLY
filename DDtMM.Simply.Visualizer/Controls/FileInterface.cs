@@ -95,7 +95,7 @@ namespace DDtMM.SIMPLY.Visualizer.Controls
                 }
             }
 
-            using (FileStream s = File.Open(FileName, FileMode.OpenOrCreate))
+            using (FileStream s = File.Open(FileName, FileMode.Create))
             {
                 s.Seek(0, SeekOrigin.End);
                 await s.WriteAsync(data, 0, data.Length);
